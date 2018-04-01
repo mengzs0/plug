@@ -1,0 +1,49 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+
+
+	<!--Specify Task bean -->
+	<bean id="jobTask" class="com.kjm.arduino.quartz.JobTask" />
+
+	<!-- Spring Quartz -->
+	<bean name="tetJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="com.kjm.arduino.quartz.JobScheduler" />
+
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="jobTask" value-ref="jobTask" />
+			</map>
+		</property>
+		<property name="durability" value="true" />
+	</bean>
+
+
+	<!-- simple trigger specify repeat interval and delay time -->
+	<bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+
+		<property name="jobDetail" ref="tetJob" />
+		<property name="repeatInterval" value="10000" />
+		<property name="startDelay" value="10000" />
+
+	</bean>
+
+	<!-- scheduler factory bean to bind,the executing code and time intervals 
+		together -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="jobDetails">
+			<list>
+				<ref bean="tetJob" />
+			</list>
+		</property>
+
+		<property name="triggers">
+			<list>
+				<ref bean="simpleTrigger" />
+			</list>
+		</property>
+	</bean>
+
+</beans>
