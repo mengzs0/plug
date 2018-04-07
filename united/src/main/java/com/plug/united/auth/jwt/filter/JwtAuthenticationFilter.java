@@ -2,9 +2,10 @@ package com.plug.united.auth.jwt.filter;
 
 import com.plug.united.auth.jwt.JwtAuthenticationToken;
 import com.plug.united.auth.jwt.JwtInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
@@ -21,8 +22,11 @@ import java.io.IOException;
 
 public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	public JwtAuthenticationFilter(RequestMatcher requestMatcher) {
 		super(requestMatcher);
+		logger.debug("JwtAuthenticationFilter");
 	}
 
 	@Override
@@ -30,6 +34,13 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
 	                                            HttpServletResponse response) throws AuthenticationException {
 		String token = request.getHeader(JwtInfo.HEADER_NAME);
 
+		logger.debug(request.getMethod());
+		
+		if(request.getMethod().equalsIgnoreCase("OPTIONS")){
+			logger.debug("Method OPTIONS");
+			return new JwtAuthenticationToken("","",null);
+		}
+		
 		if (StringUtils.isEmpty(token)) {
 			throw new AccessDeniedException("Not empty Token");
 		} else {

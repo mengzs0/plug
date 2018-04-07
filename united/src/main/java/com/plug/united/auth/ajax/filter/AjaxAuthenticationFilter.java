@@ -1,11 +1,10 @@
 package com.plug.united.auth.ajax.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.plug.united.member.entity.Member;
+import com.plug.united.account.entity.Account;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,15 +26,23 @@ public class AjaxAuthenticationFilter extends AbstractAuthenticationProcessingFi
 	public AjaxAuthenticationFilter(RequestMatcher requestMatcher, ObjectMapper objectMapper) {
 		super(requestMatcher);
 		this.objectMapper = objectMapper;
+		logger.debug("attemptAuthentication");
 	}
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException {
+
+		logger.debug("attemptAuthentication");
 		if (isJson(request)) {
-			Member member = objectMapper.readValue(request.getReader(), Member.class);
-			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(member.getUserId(), member.getPassword());
+			Account account = objectMapper.readValue(request.getReader(), Account.class);
+			
+			logger.debug("acctId:" + account.getAcctId());
+			logger.debug("password:" + account.getPassword());
+			
+			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(account.getAcctId(), account.getPassword());
+			
 			return getAuthenticationManager().authenticate(authentication);
-		} else {
+		}else {
 			throw new AccessDeniedException("Don't use content type for " + request.getContentType());
 		}
 	}

@@ -27,8 +27,12 @@ public class AjaxAuthenticationProvider extends AbstractUserDetailsAuthenticatio
 
 		String presentedPassword = authentication.getCredentials().toString();
 
+		logger.debug(presentedPassword);
+		logger.debug(userDetails.getPassword());
+		logger.debug(userDetails.getUsername());
+		
 		if (!passwordEncoder.matches(presentedPassword, userDetails.getPassword())) {
-			throw new BadCredentialsException("Bad credentials");
+			throw new BadCredentialsException("Bad credentials - password");
 		}
 	}
 
@@ -36,6 +40,9 @@ public class AjaxAuthenticationProvider extends AbstractUserDetailsAuthenticatio
 	protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
 		UserDetails loadedUser = userDetailsService.loadUserByUsername(username);
 
+		logger.debug("loadedUser:" + loadedUser.getUsername());
+		logger.debug("loadedUser:" + loadedUser.getPassword());
+		
 		if (loadedUser == null) {
 			throw new InternalAuthenticationServiceException(
 					"UserDetailsService returned null, which is an interface contract violation");

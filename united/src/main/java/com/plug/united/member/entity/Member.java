@@ -3,50 +3,93 @@ package com.plug.united.member.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.plug.united.account.entity.Account;
+
 @Entity
-@Table(name="APP_USER")
+@Table(name="TB_MEMBER")
 public class Member {
 	
 	@Id
-    @Column(name="user_id")
-	private String userId;
+    @Column(name="ACCT_ID")
+	private String acctId;
 
-	private String password;
+    @OneToOne
+    @JoinColumn(name = "ACCT_ID")
+    private Account account;
+	
+    @Column(name="EMAIL")
+	private String email;
 
-	private String role;
+    @Column(name="PHONE")
+	private String phone;
 
-	protected Member() { }
+    @Column(name="USER_NAME")
+	private String userName;
 
-	public Member(String userId, String password, String role) {
-		this.userId = userId;
-		this.password = password;
-		this.role = role;
+    @Column(name="NICK_NAME")
+	private String nickName;
+
+    @Column(name="CRT_DTM")
+	private String crtDtm;
+
+	public Account getAccount() {
+		return account;
 	}
 
-	public String getUserId() {
-		return userId;
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public String getEmail() {
+		return email;
 	}
 
-	public String getPassword() {
-		return password;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public String getPhone() {
+		return phone;
 	}
 
-	public String getRole() {
-		return role;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
-	public void setRole(String role) {
-		this.role = role;
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
+	public String getCrtDtm() {
+		return crtDtm;
+	}
+
+	public void setCrtDtm(String crtDtm) {
+		this.crtDtm = crtDtm;
+	}
+
+	public String getAcctId() {
+		return acctId;
+	}
+
+	public void setAcctId(String acctId) {
+		this.acctId = acctId;
 	}
 
 }

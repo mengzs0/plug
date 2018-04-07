@@ -24,4 +24,12 @@ public class RoleController {
 		System.out.println("RoleController : " + authentication.getPrincipal());
 		return "I'm Jwt Token Admin!";
 	}
+	
+	@PreAuthorize("hasAuthority(null)")
+	@GetMapping("/empty")
+	public String empty(Authentication authentication) {
+		//System.out.println("RoleController : " + authentication.getAuthorities().toString());
+		//System.out.println("RoleController : " + authentication.getPrincipal());
+		return "I'm Jwt Token empty!";
+	}
 }
